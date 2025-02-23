@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+    <ui:include src="header.xhtml"/>
+    <ui:param name="sh" value="#{superHeroController.currentSuperhero}" />
+    <ui:param name="stats" value="#{superHeroController.currentSuperhero.idPowerstat}" />
+    <ui:param name="looks" value="#{superHeroController.currentSuperhero.idAppearance}" />
+    <h:head>
+        <title>Detalle de #{sh.name}</title>
+        <link rel="stylesheet" href="../css/styles.css"/>
+    </h:head>
+    <h:body class="body-card">
+        <div class="card-container-custom tsh">
+            <div class="card-custom">
+                <h:graphicImage value="#{sh.idImages.lg}" alt="Imagen de #{sh.name}"/>
+                <div class="info" style="top: 30px;">Int:<br/>#{stats.intelligence}</div>
+                <div class="info" style="top: 90px;">Str:<br/>#{stats.strength}</div>
+                <div class="info" style="top: 150px;">Spd:<br/>#{stats.speed}</div>
+                <div class="info" style="top: 210px;">Drb:<br/>#{stats.durability}</div>
+                <div class="info" style="top: 270px;">Pwr:<br/>#{stats.power}</div>
+                <div class="info" style="top: 330px;">Cmbt:<br/>#{stats.combat}</div>
+                <div class="title">#{sh.name}</div>
+                <table class="stats-table">
+                    <tr>
+                        <td><b>Gender:</b><br/>#{looks.gender}</td>
+                        <td><b>Race:</b><br/>#{looks.race}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Height:</b><br/>#{looks.height}</td>
+                        <td><b>Weight:</b><br/>#{looks.weight}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Eyes:</b><br/>#{looks.eyeColor}</td>
+                        <td><b>Hair:</b><br/>#{looks.hairColor}</td>
+                    </tr>
+                </table>
+                <h:form>
+                    <h:commandLink value="Atras" class="btn btn-danger w-100" action="viewList"/>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>

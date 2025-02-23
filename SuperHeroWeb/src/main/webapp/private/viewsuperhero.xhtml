@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+    <ui:include src="header.xhtml"/>
+    <f:metadata>
+        <f:viewParam name="source" value="#{superHeroController.source}"/>
+    </f:metadata>
+    <h:head>
+        <title>#{(superHeroController.source eq 'team')?'Crear Equipo':'Lista de SuperHeroes'}</title>
+        <link rel="stylesheet" href="../css/styles.css"/>
+    </h:head>
+    <h:body>
+        <f:view>
+            <div class='container col-10 p-2 mt-4'>
+                <h:form>
+                    <div class="p-3 row align-items-center">
+                        <p:toggleSwitch value="#{superHeroController.showAsList}" immediate="true" label="Lista/Cuadricula"
+                                        onIcon="pi-table" offIcon="pi-th-large" >
+                            <p:ajax listener="#{superHeroController.toggleView}" update="viewContainer"/>
+                        </p:toggleSwitch>
+                        <h5 class="col-sm-2 col-form-label fs-4 fw-bold">Lista / Cuadrícula</h5>
+                    </div>
+                </h:form>
+                <!-- Vista en Lista -->
+                <h:panelGroup id="viewContainer">
+                    <ui:fragment rendered="#{!superHeroController.showAsList}" >
+                        <h:form>
+                            <p:dataTable value="#{superHeroController.currentSuperherosList}" var="superhero" tableStyleClass="table table-hover table-bordered table-striped mt-4" 
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowKey="#{superhero.id}"  selectionMode="single" filterEvent="enter" emptyMessage="No se encontraron resultados"
+                                         rowsPerPageTemplate="5,10,20" paginator="true" rows="10" class="pag-ui">
+                                <p:column class="table-dark" styleClass="bg-dark text-body">
+                                    <!-- <f:facet name="header" class="table-info">Imagen</f:facet>-->
+                                    <h:graphicImage value="#{superhero.idImages.xs}" title="Imagen de #{superhero.name}" alt="Imagen de #{superhero.name}"/>
+                                </p:column>
+                                <p:column class="table-dark"  sortBy="#{superhero.name}" filterBy="#{superhero.name}" styleClass="bg-dark text-body" headerText="NAME" title="Nombre">
+                                    #{superhero.name}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.idPowerstat.intelligence}" filterBy="#{superhero.idPowerstat.intelligence}" headerText="INT" title="Inteligencia" styleClass="bg-dark text-body">
+                                    #{superhero.idPowerstat.intelligence}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.idPowerstat.strength}" filterBy="#{superhero.idPowerstat.strength}" headerText="FUE" title="Fuerza" styleClass="bg-dark text-body">
+                                    #{superhero.idPowerstat.strength}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.idPowerstat.speed}" filterBy="#{superhero.idPowerstat.speed}" headerText="VEL" title="Velocidad" styleClass="bg-dark text-body">
+                                    #{superhero.idPowerstat.speed}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.idPowerstat.durability}" filterBy="#{superhero.idPowerstat.durability}" headerText="RES" title="Velocidad" styleClass="bg-dark text-body">
+                                    #{superhero.idPowerstat.durability}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.idPowerstat.power}" filterBy="#{superhero.idPowerstat.power}" headerText="POW" title="Poder" styleClass="bg-dark text-body">
+                                    #{superhero.idPowerstat.power}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.idPowerstat.combat}" filterBy="#{superhero.idPowerstat.combat}" headerText="DES" title="Destreza" styleClass="bg-dark text-body">
+                                    #{superhero.idPowerstat.combat}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.tier}" filterBy="#{superhero.tier}" headerText="TIER" title="Tier" styleClass="bg-dark text-body">
+                                    #{superhero.tier}
+                                </p:column>
+                                <p:column class="table-dark" sortBy="#{superhero.price}" filterBy="#{superhero.price}" headerText="$" title="Precio" styleClass="bg-dark text-body">
+                                    #{superhero.price}
+                                </p:column>
+                                <p:column class="table-dark" styleClass="bg-dark text-body">
+                                    <p:commandButton title="Ver detalle de #{superhero.name}" value="Detalle" styleClass="mr-2" action="#{superHeroController.viewInfo(superhero)}" process="@this"/>
+                                </p:column>
+                                <p:column class="table-dark" styleClass="bg-dark text-body" rendered="#{superHeroController.source eq 'team'}">      
+                                    <p:growl id="growl" showDetail="true" life="1500"/> 
+                                    <p:commandButton title="Añadir al Equipo" value="Añadir" update="carritoPanel growl" styleClass="mr-2 ui-button-help" action="#{superHeroController.addHeroToTeam(superhero)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </ui:fragment>
+                    <!-- Vista en Cuadrícula -->
+                    <ui:fragment rendered="#{superHeroController.showAsList}">
+                        <h:form>
+                            <p:dataGrid value="#{superHeroController.currentSuperherosList}" var="superhero" rowsPerPageTemplate="8,16,32" rows="8" layout="grid"
+                                        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                        columns="4" paginator="true" paginatorPosition="both" class="pag-ui">
+                                <ui:param name="sh" value="#{superhero}" />
+                                <ui:param name="stats" value="#{superhero.idPowerstat}" />
+                                <ui:param name="looks" value="#{superhero.idAppearance}" />
+                                <div class="card-container-custom tsh">
+                                    <div class="card-custom">
+                                        <h:graphicImage value="#{sh.idImages.lg}" alt="Imagen de #{sh.name}"/>
+                                        <div class="info" style="top: 30px;">Int:<br/>#{stats.intelligence}</div>
+                                        <div class="info" style="top: 90px;">Str:<br/>#{stats.strength}</div>
+                                        <div class="info" style="top: 150px;">Spd:<br/>#{stats.speed}</div>
+                                        <div class="info" style="top: 210px;">Drb:<br/>#{stats.durability}</div>
+                                        <div class="info" style="top: 270px;">Pwr:<br/>#{stats.power}</div>
+                                        <div class="info" style="top: 330px;">Cmbt:<br/>#{stats.combat}</div>
+                                        <div class="title">#{sh.name}</div>
+                                        <table class="stats-table">
+                                            <tr>
+                                                <td><b>Gender:</b><br/>#{looks.gender}</td>
+                                                <td><b>Race:</b><br/>#{looks.race}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Height:</b><br/>#{looks.height}</td>
+                                                <td><b>Weight:</b><br/>#{looks.weight}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Eyes:</b><br/>#{looks.eyeColor}</td>
+                                                <td><b>Hair:</b><br/>#{looks.hairColor}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </p:dataGrid>
+                        </h:form>
+                    </ui:fragment>
+                </h:panelGroup>
+
+                <p:outputPanel id="carritoPanel" rendered="#{superHeroController.source eq 'team'}">
+                    <p:growl id="growl" life="2000" showDetail="true"/>
+                    <div id="carrito" class="col-md-4">
+                        <h5 class="fw-bold text-primary">Creditos Actuales: $#{superHeroController.credits}</h5>
+                        <h4 class="fw-bold text-info">Equipo Actual</h4>
+                        <ul class="list-group">
+                            <ui:repeat value="#{superHeroController.filteredSuperheroes}" var="item">
+                                <li class="list-group-item d-flex justify-content-between align-items-center text-left">
+                                    #{item.name} - $#{item.price}
+                                    <h:form>
+                                        <p:commandButton icon="pi pi-minus"
+                                                         action="#{superHeroController.removeSuperhero(item.id,item.price)}"
+                                                         update="carritoPanel growl"
+                                                         styleClass="btn btn-danger text-danger btn-sm" />
+                                    </h:form>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                        <div class="mt-3">
+                            <h:form>
+                                <p:commandButton value="Guardar Equipo" 
+                                                 action="#{superHeroController.saveTeam()}"
+                                                 update="carritoPanel growl"
+                                                 styleClass="btn btn-success w-100"/>
+                            </h:form>
+                        </div>
+                    </div>
+
+                </p:outputPanel>
+            </div>
+        </f:view>
+    </h:body>
+</html>

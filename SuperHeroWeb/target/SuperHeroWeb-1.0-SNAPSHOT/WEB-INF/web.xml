@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <context-param>
+        <param-name>jakarta.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <filter>
+        <filter-name>AuthServlet</filter-name>
+        <filter-class>com.core.web.AuthServlet</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthServlet</filter-name>
+        <url-pattern>/private/*</url-pattern>
+    </filter-mapping>
+    <!--Declaracion del Servlet -->
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.core.web.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/UserServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+        <!-- Provisional -->
+    </welcome-file-list>
+    <error-page>
+        <exception-type>jakarta.servlet.ServletException</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+    <ui:include src="header.xhtml"/>
+    <h:head>
+        <title>Perfil ${sessionScope.user.username}</title>
+        <link rel="stylesheet" href="../css/styles.css"/>
+    </h:head>
+    <h:body>
+        <div class='container col-10 p-2 mt-4'>
+            <div class="card mb-3">
+                <h3 class="card-header">Perfil de #{superHeroController.currentUser.username}</h3>
+                <div class="card-body">
+                    <h5 class="card-title">Email: #{superHeroController.currentUser.email}</h5>
+                    <h5 class="card-title">Rol: #{superHeroController.currentUser.role}</h5>
+                    <h:form>
+                        <div class="row justify-content-center">
+                            <p:commandButton title="Cierra la sesión de #{superHeroController.currentUser.username}" value="Cerrar Sesión" styleClass="ui-button-raised ui-button-danger col-6" action="#{superHeroController.logout()}" process="@this"/>
+                            <p:commandButton title="Edita el perfil de #{superHeroController.currentUser.username}" value="Editar Perfil" styleClass="ui-button-raised ui-button-warning col-6" action="#{superHeroController.editProfile()}" process="@this"/>
+                        </div>
+                    </h:form>
+                </div>
+                <!--                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                                    <rect width="100%" height="100%" fill="#868e96"></rect>
+                                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                                </svg>-->
+                <h:panelGroup id="btnContainer">
+                    <h:form>
+                        <p:dataTable value="#{superHeroController.currentUser.teamList}" var="team" tableStyleClass="table table-hover table-bordered table-striped mt-4" 
+                                     rows="6" class="pag-ui" rowKey="#{team.heroId.id}" emptyMessage="No se encontraron resultados">
+                            <f:facet name="header">
+                                <h:outputText value="EQUIPO ACTUAL DE #{superHeroController.currentUser.username.toUpperCase()}" style="font-weight:bold; text-align:center; display:block;" />
+                            </f:facet>
+                            <p:column class="table-dark" styleClass="bg-dark text-body">
+                                <h:graphicImage value="#{team.heroId.idImages.xs}" title="Imagen de #{team.heroId.name}" alt="Imagen de #{team.heroId.name}"/>
+                            </p:column>
+                            <p:column class="table-dark" styleClass="bg-dark text-body" headerText="NAME" title="Nombre">
+                                #{team.heroId.name}
+                            </p:column>
+                            <p:column class="table-dark" headerText="INT" title="Inteligencia" styleClass="bg-dark text-body">
+                                #{team.heroId.idPowerstat.intelligence}
+                            </p:column>
+                            <p:column class="table-dark" headerText="FUE" title="Fuerza" styleClass="bg-dark text-body">
+                                #{team.heroId.idPowerstat.strength}
+                            </p:column>
+                            <p:column class="table-dark" headerText="VEL" title="Velocidad" styleClass="bg-dark text-body">
+                                #{team.heroId.idPowerstat.speed}
+                            </p:column>
+                            <p:column class="table-dark" headerText="RES" title="Velocidad" styleClass="bg-dark text-body">
+                                #{team.heroId.idPowerstat.durability}
+                            </p:column>
+                            <p:column class="table-dark" headerText="POW" title="Poder" styleClass="bg-dark text-body">
+                                #{team.heroId.idPowerstat.power}
+                            </p:column>
+                            <p:column class="table-dark" title="Destreza" headerText="DES" styleClass="bg-dark text-body">
+                                #{team.heroId.idPowerstat.combat}
+                            </p:column>
+                            <p:column class="table-dark" headerText="TIER" title="Tier" styleClass="bg-dark text-body">
+                                #{team.heroId.tier}
+                            </p:column>
+                            <p:column class="table-dark" headerText="$" title="Precio" styleClass="bg-dark text-body">
+                                #{team.heroId.price}
+                            </p:column>
+                            <p:column class="table-dark" styleClass="bg-dark text-body">
+                                <p:commandButton title="Ver detalle de #{team.heroId.name}" value="Detalle" styleClass="mr-2" action="#{superHeroController.viewInfo(team.heroId)}" process="@this"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <ul class="list-group list-group-flush mt-3">
+                            <li class="list-group-item">Victorias: 0</li>
+                            <li class="list-group-item">Derrotas: 0</li>
+                            <li class="list-group-item">Empates: 0</li>
+                        </ul>
+                        <div class="card-footer text-muted">
+                                <p:growl id="growl" showDetail="true" life="1500"/> 
+                                <p:commandButton title="Elimina el equipo actual" value="Eliminar equipo" update="btnContainer growl" rendered="#{!superHeroController.currentUser.getTeamList().isEmpty()}"
+                                                 styleClass="ui-button-raised ui-button-danger btn-block w-100" action="#{superHeroController.deleteTeam()}" />
+                        </div>
+                    </h:form>
+                </h:panelGroup>
+            </div>
+        </div>
+    </h:body>
+</html>

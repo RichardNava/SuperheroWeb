@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+    <ui:include src="header.xhtml"/>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Página principal: #{superHeroController.currentUser.username}</title>
+        <link rel="stylesheet" href="../css/styles.css" />
+    </head>
+    <h:body>
+        <div class="container-grid m-4 tsh">
+            <div class="item">
+                <h:link outcome="create" class="home-link">
+                    <h:graphicImage value="/img/b_equipo.jpg" class="home-img"/>
+                    <div class="home-grid">
+                        Crear Equipo
+                    </div>
+                    <f:param name="source" value="team"/>
+                </h:link>
+            </div>
+            <div class="item">
+                <h:link outcome="find" class="home-link">
+                    <h:graphicImage value="/img/b_buscar.jpg" class="home-img" />
+                    <div class="home-grid text-center">
+                        Busqueda Avanzada
+                    </div>
+                </h:link>
+            </div>
+            <div class="item">
+                <h:link outcome="game" class="home-link" disabled="#{!superHeroController.currentUser.getTeamList().isEmpty()}">
+                    <h:graphicImage value="/img/b_jugar.jpg" class="home-img"/>
+                    <div class="home-grid">
+                        Jugar
+                    </div>
+                </h:link>
+            </div>
+            <div class="item">
+                <h:link outcome="viewList" class="home-link">
+                    <h:graphicImage value="/img/b_superheroes.jpg" class="home-img"/>
+                    <div class="home-grid">
+                        Ver SuperHeroes
+                    </div>
+                    <f:param name="source" value="view"/>
+                </h:link>
+            </div>
+        </div>
+    </h:body>
+</html>
